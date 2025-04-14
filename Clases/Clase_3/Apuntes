@@ -1,0 +1,28 @@
+1. Conceptos Fundamentales de Pipes 🧠
+	•	Pipes son mecanismos de comunicación entre procesos en sistemas operativos. Permiten que los datos se transfieran de un proceso a otro de forma eficiente, utilizando un canal unidireccional.
+	•	Son fundamentales en la programación concurrente, permitiendo que los procesos trabajen de manera coordinada sin tener que acceder directamente a la memoria compartida.
+
+2. Ciclo de Vida de un Pipe 🔄
+	•	Creación: Usamos os.pipe() para crear un pipe, que devuelve una tupla con dos descriptores de archivo: uno para lectura y otro para escritura.
+	•	Lectura/Escritura: Los procesos pueden escribir y leer datos en los pipes. Es importante que cada proceso cierre los extremos que no utiliza, para evitar bloqueos.
+	•	Cierre: Cuando el proceso ya no necesita el pipe, debe cerrar los extremos que no usa para liberar los recursos del sistema.
+
+3. Implementación en Python 💻
+	•	Usamos funciones como os.pipe() para crear el pipe y os.fork() para crear un proceso hijo.
+	•	El proceso hijo y el padre pueden intercambiar datos a través del pipe, utilizando os.write() y os.read().
+	•	La comunicación entre procesos puede ser unidireccional o bidireccional. Para la comunicación bidireccional, se pueden crear dos pipes.
+
+4. Deadlocks y Prevención 🚫
+	•	Deadlock: Ocurre cuando dos o más procesos se bloquean esperando el uno al otro. Esto puede suceder si los extremos de los pipes no se manejan correctamente.
+	•	Prevención:
+	•	Asegúrate de cerrar los extremos del pipe que no se usan.
+	•	Organiza los procesos de forma que no haya ciclos de dependencia, es decir, que un proceso no espere una respuesta de otro que a su vez espera del primero.
+	•	Usa timeouts o controles de flujo para evitar bloqueos si el pipe está lleno.
+
+5. Ejemplos Prácticos 🧪
+	•	Vimos ejemplos donde un proceso escribe y otro lee a través de un pipe. También analizamos cómo se bloquea un proceso si intenta leer de un pipe vacío o escribir en un pipe lleno.
+	•	Además, exploramos un ejemplo de deadlock simple, donde dos procesos esperan el uno al otro y nunca pueden completar su tarea.
+
+6. Patrones de Comunicación Avanzados 🔄
+	•	Se explicó cómo encadenar múltiples procesos conectando pipes entre ellos, lo que permite construir un pipeline, donde la salida de un proceso se convierte en la entrada del siguiente.
+	•	La comunicación bidireccional, aunque más compleja, permite una interacción más fluida entre los procesos.
