@@ -1,0 +1,33 @@
+1. Conceptos Fundamentales de FIFOs 🧠
+• Los FIFOs (First In, First Out) o pipes con nombre son mecanismos de comunicación entre procesos que se representan como archivos especiales en el sistema de archivos.
+• A diferencia de los pipes anónimos, los FIFOs permiten la comunicación entre procesos no relacionados, ya que persisten como archivos accesibles por múltiples procesos.
+• Son útiles para sistemas donde los procesos no se crean entre sí, como servicios independientes o daemons.
+
+2. Ciclo de Vida de un FIFO 🔄
+• Creación: Se usa os.mkfifo() o el comando mkfifo en terminal.
+• Conexión: Un proceso lo abre para lectura y otro para escritura. Si uno intenta abrir en modo bloqueante y no hay nadie del otro lado, se queda esperando.
+• Comunicación: Se usa open(), read(), write() en el archivo FIFO como si fuera un archivo común, pero sin almacenamiento persistente.
+• Eliminación: Se puede borrar con os.remove() o rm, pero los procesos que ya lo tienen abierto pueden seguir usándolo mientras dure la sesión.
+
+3. Implementación en Python 💻
+• Los procesos usan os.open() y os.read() / os.write() para interactuar con el FIFO.
+• Se pueden usar procesos independientes o scripts diferentes, ya que el FIFO actúa como punto de encuentro.
+• La escritura y lectura son bloqueantes por defecto, pero se puede usar O_NONBLOCK para comportamiento no bloqueante.
+
+4. Bloqueos y Consideraciones 🚫
+• Bloqueo del escritor: Si no hay lector, open(fifo, 'w') se bloquea.
+• Bloqueo del lector: Si no hay escritor, open(fifo, 'r') también se bloquea hasta que alguien escriba.
+• Evitar bloqueos: Siempre iniciar el lector antes que el escritor o usar modo no bloqueante con manejo de errores (ENXIO).
+
+5. Ejemplos Prácticos 🧪
+• Se implementó un logger por FIFO, donde un proceso escribe logs y otro los muestra.
+• Analizamos comportamiento bloqueante, atomicidad de escritura (segura si ≤ PIPE_BUF), y qué pasa si múltiples lectores o escritores interactúan al mismo tiempo.
+• Se identificaron las limitaciones de los FIFOs para sistemas de broadcast (un mensaje leído desaparece del flujo).
+
+6. Patrones de Comunicación Avanzados 🔄
+• Multilectores: No es viable con un solo FIFO si todos deben recibir los mismos datos.
+• Se sugirieron alternativas como:
+- Un FIFO por lector.
+- Un proceso central que reenvíe mensajes a múltiples destinos.
+- Uso de sockets, message queues, o protocolos pub-sub como MQTT.
+• También se discutió cómo gestionar múltiples niveles de log y mejorar la arquitectura de servicios concurrentes usando estos conceptos.
