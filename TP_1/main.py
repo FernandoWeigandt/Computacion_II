@@ -22,7 +22,7 @@ def analyzer(tipo, conn, queue_out, stop_evt):
             if tipo == "frecuencia":
                 valor = pkt["frecuencia"]
             elif tipo == "presion":
-                valor = pkt["presion"][0]  # Solo sistólica
+                valor = (pkt["presion"][0], pkt["presion"][1])  # Sistolica y diastolica
             elif tipo == "oxigeno":
                 valor = pkt["oxigeno"]
             else:
@@ -30,6 +30,22 @@ def analyzer(tipo, conn, queue_out, stop_evt):
 
             ventana.append(valor)
             datos = np.array(ventana, dtype=float)
+            if tipo == "presion":
+                sistolicas = [v[0] for v in ventana]
+                diastolicas = [v[1] for v in ventana]
+                queue_out.put({
+                    "tipo": tipo,
+                    "timestamp": pkt["timestamp"],
+                    "media": {
+                        "sistolica": round(np.mean(sistolicas), 2),
+                        "diastolica": round(np.mean(diastolicas), 2)
+                    },
+                    "desv": {
+                        "sistolica": round(np.std(sistolicas, ddof=0), 2),
+                        "diastolica": round(np.std(diastolicas, ddof=0), 2)
+                    }
+                })
+                continue  # Saltear el envío genérico
             queue_out.put({
                 "tipo": tipo,
                 "timestamp": pkt["timestamp"],
@@ -52,7 +68,7 @@ def generar_muestra():
 def verifier(queue_in, total_samples, path_out):
     blockchain = []
     results_by_ts = {}
-    prev_hash = "GENESIS"
+    prev_hash = "0" * 64
     completados = 0
     fins = 0
 
@@ -71,7 +87,7 @@ def verifier(queue_in, total_samples, path_out):
 
         if {"frecuencia", "presion", "oxigeno"} <= results_by_ts[ts].keys():
             f = results_by_ts[ts]["frecuencia"]["media"]
-            p = results_by_ts[ts]["presion"]["media"]
+            p = results_by_ts[ts]["presion"]["media"]["sistolica"]
             o = results_by_ts[ts]["oxigeno"]["media"]
 
             alerta = not (f < 200 and 90 <= o <= 100 and p < 200)
@@ -110,8 +126,8 @@ def main():
     queue_resultados = Queue()
     stop_event = Event()
 
-    # Enviar 10 muestras (luego serán 60)
-    TOTAL = 10
+    # Enviar 60 muestras
+    TOTAL = 60
     path_blockchain = "blockchain.json"
     # Crear proceso verificador
     V = Process(target=verifier, args=(queue_resultados, TOTAL, path_blockchain))

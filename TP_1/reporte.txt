@@ -1,6 +1,7 @@
-Total de bloques: 10
+Total de bloques: 60
 Bloques con alerta: 0
-Promedio general frecuencia: 110.41
-Promedio general presion (sistolica): 148.89
-Promedio general oxigeno: 94.62
-Cadena íntegra: SIN CORRUPCIONES DETECTADAS
+Promedio general frecuencia: 126.68
+Promedio general presion (sistolica): 141.25
+Promedio general presion (diastolica): 89.91
+Promedio general oxigeno: 95.15
+Bloques corruptos en índices: 0

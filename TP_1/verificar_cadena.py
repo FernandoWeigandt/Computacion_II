@@ -1,5 +1,3 @@
-
-
 import json
 import hashlib
 import statistics
@@ -22,6 +20,7 @@ def main():
     corrupt = []
     prev = "GENESIS"
     freqs, press, oxys = [], [], []
+    diastolic = []
     alertas = 0
 
     for i, blk in enumerate(chain):
@@ -31,7 +30,8 @@ def main():
         prev = blk["hash"]
 
         freqs.append(blk["datos"]["frecuencia"]["media"])
-        press.append(blk["datos"]["presion"]["media"])
+        press.append(blk["datos"]["presion"]["media"]["sistolica"])
+        diastolic.append(blk["datos"]["presion"]["media"]["diastolica"])
         oxys.append(blk["datos"]["oxigeno"]["media"])
         if blk.get("alerta"):
             alertas += 1
@@ -39,6 +39,7 @@ def main():
     total = len(chain)
     prom_f = statistics.fmean(freqs) if freqs else 0.0
     prom_p = statistics.fmean(press) if press else 0.0
+    prom_d = statistics.fmean(diastolic) if diastolic else 0.0
     prom_o = statistics.fmean(oxys) if oxys else 0.0
 
     lineas = [
@@ -46,6 +47,7 @@ def main():
         f"Bloques con alerta: {alertas}",
         f"Promedio general frecuencia: {prom_f:.2f}",
         f"Promedio general presion (sistolica): {prom_p:.2f}",
+        f"Promedio general presion (diastolica): {prom_d:.2f}",
         f"Promedio general oxigeno: {prom_o:.2f}",
         "Cadena íntegra: SIN CORRUPCIONES DETECTADAS" if not corrupt
         else "Bloques corruptos en índices: " + ", ".join(map(str, corrupt))
