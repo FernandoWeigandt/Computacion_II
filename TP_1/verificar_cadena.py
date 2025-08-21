@@ -18,7 +18,9 @@ def main():
         return
 
     corrupt = []
-    prev = "GENESIS"
+    # El verificador debe comenzar con el mismo hash inicial
+    # que utiliza la generación de la cadena (64 ceros).
+    prev = "0" * 64
     freqs, press, oxys = [], [], []
     diastolic = []
     alertas = 0
