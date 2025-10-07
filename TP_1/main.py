@@ -146,7 +146,7 @@ def main():
             pA_padre.send(pkt)
             pB_padre.send(pkt)
             pC_padre.send(pkt)
-            time.sleep(1)
+            time.sleep(0.5)
     finally:
         for p in (pA_padre, pB_padre, pC_padre):
             p.send(None)

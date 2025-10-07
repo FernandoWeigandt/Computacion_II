@@ -1,7 +1,7 @@
 Total de bloques: 60
 Bloques con alerta: 0
-Promedio general frecuencia: 126.68
-Promedio general presion (sistolica): 141.25
-Promedio general presion (diastolica): 89.91
-Promedio general oxigeno: 95.15
+Promedio general frecuencia: 115.82
+Promedio general presion (sistolica): 143.12
+Promedio general presion (diastolica): 91.88
+Promedio general oxigeno: 94.38
 Bloques corruptos en índices: 0
