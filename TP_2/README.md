@@ -15,15 +15,19 @@ pip install -r requirements.txt
 ### 2) Levantar Servidor de Procesamiento (Parte B)
 En otra terminal:
 ```bash
-python server_processing.py -i :: -p 9000 -n 0
+python3 server_processing.py -i 127.0.0.1 -p 8001
 ```
 
 ### 3) Levantar Servidor Asyncio (Parte A)
 ```bash
-python server_scraping.py -i :: -p 8000 -w 4 --proc-host :: --proc-port 9000
+python3 server_scraping.py -i 127.0.0.1 -p 8000 --proc-host 127.0.0.1 --proc-port 8001
 ```
 
 ### 4) Probar con el cliente
 ```bash
-python client.py https://example.com
+python3 client.py https://www.google.com.ar 127.0.0.1 8000
 ```
+Para ipv6
+python3 server_processing.py -i "::1" -p 8001
+python3 server_scraping.py -i "::1" -p 8000 --proc-host "::1" --proc-port 8001
+python3 client.py https://www.google.com.ar
