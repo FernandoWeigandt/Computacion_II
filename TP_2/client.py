@@ -14,7 +14,7 @@ async def main():
         async with s.get(endpoint, params={"url": url}) as r:
             print("HTTP", r.status)
             data = await r.json()
-            print(json.dumps(data, indent=2)[:2000])
+            print(json.dumps(data, indent=2))
 
 if __name__ == "__main__":
     asyncio.run(main())
